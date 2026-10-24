@@ -1,0 +1,12 @@
+.gradle/
+build/
+**/.gradle/
+**/build/
+target/
+history/
+*.apk
+*.ipa
+*.app/
+local.properties
+.DS_Store
+Thumbs.db

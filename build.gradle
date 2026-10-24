@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version "${serenityCoreVersion}"
+}
+
+group = 'co.com.automation.certification'
+version = '1.0-SNAPSHOT'
+
+defaultTasks 'clean', 'test', 'aggregate'
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    implementation "net.serenity-bdd:serenity-core:${serenityCoreVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay:${serenityCoreVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityCoreVersion}"
+    implementation "net.serenity-bdd:serenity-ensure:${serenityCoreVersion}"
+    implementation "io.appium:java-client:${appiumClientVersion}"
+    implementation "org.slf4j:slf4j-simple:${slf4jVersion}"
+
+    testImplementation "net.serenity-bdd:serenity-junit5:${serenityCoreVersion}"
+    testImplementation "net.serenity-bdd:serenity-cucumber:${serenityCucumberVersion}"
+    testImplementation platform("io.cucumber:cucumber-bom:${cucumberVersion}")
+    testImplementation "io.cucumber:cucumber-junit-platform-engine"
+    testImplementation "org.junit.platform:junit-platform-suite:${junitPlatformSuiteVersion}"
+    testImplementation "org.hamcrest:hamcrest:${hamcrestVersion}"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher:${junitPlatformSuiteVersion}"
+}
+
+test {
+    useJUnitPlatform()
+    include '**/RunnerMovil.class'
+    testLogging {
+        showStandardStreams = true
+    }
+    systemProperty 'file.encoding', 'UTF-8'
+    finalizedBy 'aggregate'
+}
+
+serenity {
+    reports = ['single-page-html']
+}
